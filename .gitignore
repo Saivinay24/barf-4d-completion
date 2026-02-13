@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Large files
+*.ply
+*.splat
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.weights
+*.pth
+*.ckpt
+*.safetensors
+
+# Datasets (too large for Git)
+datasets/davis/
+datasets/sintel/
+datasets/*/frames/
+datasets/*/depth/
+datasets/*/masks/
+
+# Model outputs (use Git LFS or external storage)
+reconstructions/*.ply
+reconstructions/*.splat
+diffusion_experiments/*/generated_*
+diffusion_experiments/*/*.png
+diffusion_experiments/*/*.jpg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.log
+wandb/
