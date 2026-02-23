@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BARF 4D — Web Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+    }
+
+    canvas { display: block; }
+
+    /* HUD */
+    #hud {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    #hud h1 {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ff4444;
+    }
+
+    #hud .status {
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 0.1em;
+    }
+
+    /* Controls panel */
+    #controls {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #ccc;
+      padding: 8px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: rgba(255,68,68,0.15);
+      border-color: #ff4444;
+      color: #fff;
+    }
+
+    button.active {
+      background: rgba(255,68,68,0.2);
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+
+    /* File loader */
+    #loader {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 20;
+      transition: opacity 0.5s;
+    }
+
+    #loader h2 {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    #loader label {
+      display: inline-block;
+      padding: 12px 28px;
+      border: 1px solid #ff4444;
+      color: #ff4444;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #loader label:hover {
+      background: rgba(255,68,68,0.1);
+    }
+
+    #loader input { display: none; }
+
+    #loader .hint {
+      margin-top: 14px;
+      font-size: 10px;
+      color: #333;
+      letter-spacing: 0.1em;
+    }
+
+    #info {
+      position: fixed;
+      top: 60px;
+      right: 24px;
+      font-size: 10px;
+      color: #444;
+      letter-spacing: 0.08em;
+      line-height: 1.8;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<div id="hud">
+  <h1>BARF 4D Viewer</h1>
+  <span class="status" id="status">No file loaded</span>
+</div>
+
+<div id="loader">
+  <h2>Point Cloud Viewer</h2>
+  <label>
+    Load .ply file
+    <input type="file" id="fileInput" accept=".ply" />
+  </label>
+  <div class="hint">or drag & drop a .ply file</div>
+</div>
+
+<div id="info">
+  Drag — orbit<br>
+  Scroll — zoom<br>
+  Right drag — pan
+</div>
+
+<div id="controls">
+  <button id="toggleGaps" class="active">Gaps ON</button>
+  <button id="resetCamera">Reset View</button>
+</div>
+
+<script>
+// ─── PLY Loader (inline from ply_loader.js) ───────────────────────────────────
+async function loadPLY(buffer) {
+  const text = new TextDecoder().decode(buffer.slice(0, 2000));
+  const headerEnd = text.indexOf('end_header') + 'end_header'.length + 1;
+  const vertexCountMatch = text.match(/element vertex (\d+)/);
+  const vertexCount = parseInt(vertexCountMatch[1]);
+
+  const dataView = new DataView(buffer, headerEnd);
+  const points = [];
+  const colors = [];
+
+  for (let i = 0; i < vertexCount; i++) {
+    const offset = i * 24; // float32 xyz + uint8 rgb padded
+    points.push(
+      dataView.getFloat32(offset, true),
+      dataView.getFloat32(offset + 4, true),
+      dataView.getFloat32(offset + 8, true)
+    );
+    colors.push(
+      dataView.getUint8(offset + 12) / 255,
+      dataView.getUint8(offset + 13) / 255,
+      dataView.getUint8(offset + 14) / 255
+    );
+  }
+
+  return { points, colors, vertexCount };
+}
+
+// ─── Gap Viz (inline from gap_viz.js) ────────────────────────────────────────
+let gapMeshes = [];
+let gapsVisible = true;
+
+async function loadGaps(gapsJsonUrl) {
+  try {
+    const response = await fetch(gapsJsonUrl);
+    const gaps = await response.json();
+    renderGaps(gaps);
+  } catch (e) {
+    console.warn('Could not load gaps.json:', e);
+  }
+}
+
+function renderGaps(gaps) {
+  // Remove old gap meshes
+  gapMeshes.forEach(m => scene.remove(m));
+  gapMeshes = [];
+
+  gaps.forEach(gap => {
+    const radius = Math.cbrt(gap.size) * 0.1;
+    const geometry = new THREE.SphereGeometry(radius, 16, 16);
+    const material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(1, 0, 0),
+      opacity: 0.5,
+      transparent: true
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.set(gap.center[0], gap.center[1], gap.center[2]);
+    scene.add(sphere);
+    gapMeshes.push(sphere);
+  });
+}
+
+// ─── Three.js Scene ───────────────────────────────────────────────────────────
+const container = document.getElementById('canvas-container');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x0a0a0f);
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1000);
+camera.position.set(0, 0, 5);
+
+// Orbit controls (manual, no import needed)
+let isDragging = false, isRightDrag = false;
+let prevMouse = { x: 0, y: 0 };
+let spherical = { theta: 0, phi: Math.PI / 2, radius: 5 };
+let target = new THREE.Vector3();
+
+renderer.domElement.addEventListener('mousedown', e => {
+  isDragging = true;
+  isRightDrag = e.button === 2;
+  prevMouse = { x: e.clientX, y: e.clientY };
+});
+renderer.domElement.addEventListener('contextmenu', e => e.preventDefault());
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  const dx = e.clientX - prevMouse.x;
+  const dy = e.clientY - prevMouse.y;
+  if (isRightDrag) {
+    const panSpeed = 0.002 * spherical.radius;
+    const right = new THREE.Vector3();
+    const up = new THREE.Vector3();
+    camera.getWorldDirection(right);
+    right.cross(camera.up).normalize();
+    up.copy(camera.up);
+    target.addScaledVector(right, -dx * panSpeed);
+    target.addScaledVector(up, dy * panSpeed);
+  } else {
+    spherical.theta -= dx * 0.005;
+    spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05, spherical.phi - dy * 0.005));
+  }
+  prevMouse = { x: e.clientX, y: e.clientY };
+  updateCamera();
+});
+renderer.domElement.addEventListener('wheel', e => {
+  spherical.radius = Math.max(0.1, spherical.radius * (1 + e.deltaY * 0.001));
+  updateCamera();
+});
+
+function updateCamera() {
+  camera.position.set(
+    target.x + spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta),
+    target.y + spherical.radius * Math.cos(spherical.phi),
+    target.z + spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta)
+  );
+  camera.lookAt(target);
+}
+
+updateCamera();
+
+// ─── Point Cloud Rendering ────────────────────────────────────────────────────
+let pointCloud = null;
+
+function renderPointCloud(points, colors, vertexCount) {
+  if (pointCloud) scene.remove(pointCloud);
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+  const material = new THREE.PointsMaterial({
+    size: 0.01,
+    vertexColors: true,
+    sizeAttenuation: true
+  });
+
+  pointCloud = new THREE.Points(geometry, material);
+  scene.add(pointCloud);
+
+  // Center camera on point cloud
+  geometry.computeBoundingSphere();
+  const bs = geometry.boundingSphere;
+  target.copy(bs.center);
+  spherical.radius = bs.radius * 2.5;
+  updateCamera();
+
+  document.getElementById('status').textContent = `${vertexCount.toLocaleString()} points loaded`;
+  document.getElementById('loader').style.opacity = '0';
+  setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+}
+
+// ─── File Input ───────────────────────────────────────────────────────────────
+document.getElementById('fileInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('status').textContent = 'Loading...';
+  const buffer = await file.arrayBuffer();
+  const { points, colors, vertexCount } = await loadPLY(buffer);
+  renderPointCloud(points, colors, vertexCount);
+});
+
+// Drag and drop
+document.body.addEventListener('dragover', e => e.preventDefault());
+document.body.addEventListener('drop', async e => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.name.endsWith('.ply')) return;
+  document.getElementById('status').textContent = 'Loading...';
+  const buffer = await file.arrayBuffer();
+  const { points, colors, vertexCount } = await loadPLY(buffer);
+  renderPointCloud(points, colors, vertexCount);
+});
+
+// ─── Controls ─────────────────────────────────────────────────────────────────
+document.getElementById('toggleGaps').addEventListener('click', function() {
+  gapsVisible = !gapsVisible;
+  gapMeshes.forEach(m => m.visible = gapsVisible);
+  this.textContent = gapsVisible ? 'Gaps ON' : 'Gaps OFF';
+  this.classList.toggle('active', gapsVisible);
+});
+
+document.getElementById('resetCamera').addEventListener('click', () => {
+  spherical = { theta: 0, phi: Math.PI / 2, radius: 5 };
+  target.set(0, 0, 0);
+  updateCamera();
+});
+
+// ─── Load gaps from file ──────────────────────────────────────────────────────
+loadGaps('gaps.json');
+
+// ─── Resize ───────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─── Render Loop ─────────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+</body>
+</html>
