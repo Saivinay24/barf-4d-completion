@@ -15,11 +15,7 @@
       overflow: hidden;
     }
 
-    #canvas-container {
-      position: fixed;
-      inset: 0;
-    }
-
+    #canvas-container { position: fixed; inset: 0; }
     canvas { display: block; }
 
     /* HUD */
@@ -30,56 +26,162 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+      background: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
       pointer-events: none;
       z-index: 10;
     }
-
     #hud h1 {
       font-size: 13px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #ff4444;
     }
-
     #hud .status {
       font-size: 11px;
       color: #666;
       letter-spacing: 0.1em;
     }
 
-    /* Controls panel */
+    /* Mode indicator top-left */
+    #mode-indicator {
+      position: fixed;
+      top: 56px;
+      left: 24px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border: 1px solid #333;
+      color: #555;
+      z-index: 10;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+    #mode-indicator.completed {
+      border-color: #44ff88;
+      color: #44ff88;
+    }
+
+    /* Info top-right */
+    #info {
+      position: fixed;
+      top: 56px;
+      right: 24px;
+      font-size: 10px;
+      color: #3a3a3a;
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Split view labels */
+    #split-label-left, #split-label-right {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+      z-index: 11;
+      pointer-events: none;
+      display: none;
+      writing-mode: vertical-rl;
+    }
+    #split-label-left  { left: 10px; }
+    #split-label-right { right: 10px; transform: translateY(-50%) rotate(180deg); }
+
+    /* Split divider line */
+    #split-divider {
+      display: none;
+      position: fixed;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: rgba(255,255,255,0.08);
+      z-index: 11;
+      pointer-events: none;
+    }
+
+    /* Timeline */
+    #timeline {
+      position: fixed;
+      bottom: 76px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 10;
+      background: rgba(10,10,15,0.88);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 10px 20px;
+      min-width: 440px;
+    }
+    #timeline label {
+      font-size: 9px;
+      color: #3a3a3a;
+      letter-spacing: 0.15em;
+      white-space: nowrap;
+    }
+    #frame-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 2px;
+      background: #1e1e1e;
+      outline: none;
+      cursor: pointer;
+    }
+    #frame-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px; height: 10px;
+      background: #ff4444;
+      cursor: pointer;
+      border-radius: 0;
+    }
+    #frame-slider:disabled { opacity: 0.2; cursor: default; }
+    #frame-display {
+      font-size: 10px;
+      color: #444;
+      letter-spacing: 0.08em;
+      min-width: 70px;
+      text-align: right;
+    }
+    #play-btn { padding: 4px 12px; font-size: 10px; }
+    #play-btn.playing { border-color: #ff4444; color: #ff4444; }
+
+    /* Controls */
     #controls {
       position: fixed;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 12px;
+      gap: 10px;
       z-index: 10;
     }
 
     button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #ccc;
-      padding: 8px 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #888;
+      padding: 8px 16px;
       font-family: 'Courier New', monospace;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
+      white-space: nowrap;
     }
-
     button:hover {
-      background: rgba(255,68,68,0.15);
+      background: rgba(255,68,68,0.12);
       border-color: #ff4444;
       color: #fff;
     }
-
     button.active {
-      background: rgba(255,68,68,0.2);
+      background: rgba(255,68,68,0.18);
       border-color: #ff4444;
       color: #ff4444;
     }
@@ -87,56 +189,43 @@
     /* File loader */
     #loader {
       position: fixed;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
       z-index: 20;
       transition: opacity 0.5s;
     }
-
     #loader h2 {
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #555;
+      color: #444;
       margin-bottom: 20px;
     }
-
     #loader label {
       display: inline-block;
       padding: 12px 28px;
       border: 1px solid #ff4444;
       color: #ff4444;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s;
     }
-
-    #loader label:hover {
-      background: rgba(255,68,68,0.1);
-    }
-
+    #loader label:hover { background: rgba(255,68,68,0.08); }
     #loader input { display: none; }
-
     #loader .hint {
       margin-top: 14px;
-      font-size: 10px;
-      color: #333;
+      font-size: 9px;
+      color: #2a2a2a;
       letter-spacing: 0.1em;
     }
-
-    #info {
-      position: fixed;
-      top: 60px;
-      right: 24px;
-      font-size: 10px;
-      color: #444;
-      letter-spacing: 0.08em;
-      line-height: 1.8;
-      z-index: 10;
+    #loader .hint2 {
+      margin-top: 6px;
+      font-size: 9px;
+      color: #2a2a2a;
+      letter-spacing: 0.1em;
     }
   </style>
 </head>
@@ -149,32 +238,51 @@
   <span class="status" id="status">No file loaded</span>
 </div>
 
-<div id="loader">
-  <h2>Point Cloud Viewer</h2>
-  <label>
-    Load .ply file
-    <input type="file" id="fileInput" accept=".ply" />
-  </label>
-  <div class="hint">or drag & drop a .ply file</div>
-</div>
+<div id="mode-indicator">PARTIAL</div>
 
 <div id="info">
   Drag — orbit<br>
   Scroll — zoom<br>
-  Right drag — pan
+  Right drag — pan<br>
+  C — before / after<br>
+  S — split view
+</div>
+
+<div id="split-label-left">PARTIAL</div>
+<div id="split-label-right">COMPLETED</div>
+<div id="split-divider"></div>
+
+<div id="loader">
+  <h2>Point Cloud Viewer</h2>
+  <label>
+    Load .ply file
+    <input type="file" id="fileInput" accept=".ply,.json" multiple />
+  </label>
+  <div class="hint">drop .ply to load point cloud</div>
+  <div class="hint2">drop second .ply for before/after · drop .json to reload gaps</div>
+</div>
+
+<div id="timeline">
+  <label>FRAME</label>
+  <input type="range" id="frame-slider" min="0" max="0" value="0" disabled />
+  <span id="frame-display">— / —</span>
+  <button id="play-btn">▶ Play</button>
 </div>
 
 <div id="controls">
   <button id="toggleGaps" class="active">Gaps ON</button>
+  <button id="toggleComplete">Before / After &nbsp;[C]</button>
+  <button id="toggleSplit">Split View &nbsp;[S]</button>
   <button id="resetCamera">Reset View</button>
 </div>
 
 <script>
-// ─── PLY Loader (inline from ply_loader.js) ───────────────────────────────────
-async function loadPLY(buffer) {
+// ─── PLY Parser ───────────────────────────────────────────────────────────────
+async function parsePLY(buffer) {
   const text = new TextDecoder().decode(buffer.slice(0, 2000));
   const headerEnd = text.indexOf('end_header') + 'end_header'.length + 1;
   const vertexCountMatch = text.match(/element vertex (\d+)/);
+  if (!vertexCountMatch) throw new Error('No vertex count in PLY header');
   const vertexCount = parseInt(vertexCountMatch[1]);
 
   const dataView = new DataView(buffer, headerEnd);
@@ -182,11 +290,11 @@ async function loadPLY(buffer) {
   const colors = [];
 
   for (let i = 0; i < vertexCount; i++) {
-    const offset = i * 24; // float32 xyz + uint8 rgb padded
+    const offset = i * 24;
     points.push(
-      dataView.getFloat32(offset, true),
-      dataView.getFloat32(offset + 4, true),
-      dataView.getFloat32(offset + 8, true)
+      dataView.getFloat32(offset,      true),
+      dataView.getFloat32(offset + 4,  true),
+      dataView.getFloat32(offset + 8,  true)
     );
     colors.push(
       dataView.getUint8(offset + 12) / 255,
@@ -194,61 +302,26 @@ async function loadPLY(buffer) {
       dataView.getUint8(offset + 14) / 255
     );
   }
-
   return { points, colors, vertexCount };
 }
 
-// ─── Gap Viz (inline from gap_viz.js) ────────────────────────────────────────
-let gapMeshes = [];
-let gapsVisible = true;
-
-async function loadGaps(gapsJsonUrl) {
-  try {
-    const response = await fetch(gapsJsonUrl);
-    const gaps = await response.json();
-    renderGaps(gaps);
-  } catch (e) {
-    console.warn('Could not load gaps.json:', e);
-  }
-}
-
-function renderGaps(gaps) {
-  // Remove old gap meshes
-  gapMeshes.forEach(m => scene.remove(m));
-  gapMeshes = [];
-
-  gaps.forEach(gap => {
-    const radius = Math.cbrt(gap.size) * 0.1;
-    const geometry = new THREE.SphereGeometry(radius, 16, 16);
-    const material = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(1, 0, 0),
-      opacity: 0.5,
-      transparent: true
-    });
-    const sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(gap.center[0], gap.center[1], gap.center[2]);
-    scene.add(sphere);
-    gapMeshes.push(sphere);
-  });
-}
-
-// ─── Three.js Scene ───────────────────────────────────────────────────────────
+// ─── Three.js Setup ───────────────────────────────────────────────────────────
 const container = document.getElementById('canvas-container');
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer  = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x0a0a0f);
 container.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
+const scene  = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1000);
 camera.position.set(0, 0, 5);
 
-// Orbit controls (manual, no import needed)
+// ─── Orbit Controls ───────────────────────────────────────────────────────────
 let isDragging = false, isRightDrag = false;
-let prevMouse = { x: 0, y: 0 };
-let spherical = { theta: 0, phi: Math.PI / 2, radius: 5 };
-let target = new THREE.Vector3();
+let prevMouse  = { x: 0, y: 0 };
+let spherical  = { theta: 0, phi: Math.PI / 2, radius: 5 };
+let target     = new THREE.Vector3();
 
 renderer.domElement.addEventListener('mousedown', e => {
   isDragging = true;
@@ -262,14 +335,12 @@ window.addEventListener('mousemove', e => {
   const dx = e.clientX - prevMouse.x;
   const dy = e.clientY - prevMouse.y;
   if (isRightDrag) {
-    const panSpeed = 0.002 * spherical.radius;
+    const speed = 0.002 * spherical.radius;
     const right = new THREE.Vector3();
-    const up = new THREE.Vector3();
     camera.getWorldDirection(right);
     right.cross(camera.up).normalize();
-    up.copy(camera.up);
-    target.addScaledVector(right, -dx * panSpeed);
-    target.addScaledVector(up, dy * panSpeed);
+    target.addScaledVector(right, -dx * speed);
+    target.addScaledVector(camera.up, dy * speed);
   } else {
     spherical.theta -= dx * 0.005;
     spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05, spherical.phi - dy * 0.005));
@@ -290,63 +361,142 @@ function updateCamera() {
   );
   camera.lookAt(target);
 }
-
 updateCamera();
 
-// ─── Point Cloud Rendering ────────────────────────────────────────────────────
-let pointCloud = null;
+// ─── Gap Visualization ────────────────────────────────────────────────────────
+let gapMeshes   = [];
+let gapsVisible = true;
 
-function renderPointCloud(points, colors, vertexCount) {
-  if (pointCloud) scene.remove(pointCloud);
+const INLINE_GAPS = [
+  { center: [3,  2, -2], size: 1.0 },
+  { center: [-3,-1,  1], size: 0.5 },
+  { center: [0,  3, -3], size: 2.0 }
+];
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-  const material = new THREE.PointsMaterial({
-    size: 0.01,
-    vertexColors: true,
-    sizeAttenuation: true
+function renderGaps(gaps) {
+  gapMeshes.forEach(m => scene.remove(m));
+  gapMeshes = [];
+  gaps.forEach(gap => {
+    const radius   = Math.cbrt(gap.size) * 0.1;
+    const geometry = new THREE.SphereGeometry(radius, 16, 16);
+    const material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(1, 0, 0),
+      opacity: 0.55,
+      transparent: true
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.set(gap.center[0], gap.center[1], gap.center[2]);
+    sphere.visible = gapsVisible;
+    scene.add(sphere);
+    gapMeshes.push(sphere);
   });
-
-  pointCloud = new THREE.Points(geometry, material);
-  scene.add(pointCloud);
-
-  // Center camera on point cloud
-  geometry.computeBoundingSphere();
-  const bs = geometry.boundingSphere;
-  target.copy(bs.center);
-  spherical.radius = bs.radius * 2.5;
-  updateCamera();
-
-  document.getElementById('status').textContent = `${vertexCount.toLocaleString()} points loaded`;
-  document.getElementById('loader').style.opacity = '0';
-  setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
 }
 
-// ─── File Input ───────────────────────────────────────────────────────────────
-document.getElementById('fileInput').addEventListener('change', async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  document.getElementById('status').textContent = 'Loading...';
-  const buffer = await file.arrayBuffer();
-  const { points, colors, vertexCount } = await loadPLY(buffer);
-  renderPointCloud(points, colors, vertexCount);
+// Try server first, fall back to inline
+(async () => {
+  try {
+    const res = await fetch('gaps.json');
+    if (!res.ok) throw new Error();
+    renderGaps(await res.json());
+  } catch {
+    renderGaps(INLINE_GAPS);
+  }
+})();
+
+// ─── Point Cloud State ────────────────────────────────────────────────────────
+let pointCloud     = null;
+let partialCloud   = null;
+let completedCloud = null;
+
+function buildCloud(points, colors) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+  geo.setAttribute('color',    new THREE.Float32BufferAttribute(colors,  3));
+  const mat = new THREE.PointsMaterial({ size: 0.01, vertexColors: true, sizeAttenuation: true });
+  return new THREE.Points(geo, mat);
+}
+
+function renderPointCloud(points, colors, vertexCount, isCompleted) {
+  const cloud = buildCloud(points, colors);
+
+  if (!isCompleted) {
+    if (partialCloud) scene.remove(partialCloud);
+    partialCloud = cloud;
+    scene.add(partialCloud);
+    pointCloud = partialCloud;
+
+    cloud.geometry.computeBoundingSphere();
+    const bs = cloud.geometry.boundingSphere;
+    target.copy(bs.center);
+    spherical.radius = bs.radius * 2.5;
+    updateCamera();
+
+    document.getElementById('loader').style.opacity = '0';
+    setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+  } else {
+    if (completedCloud) scene.remove(completedCloud);
+    completedCloud = cloud;
+    completedCloud.visible = false;
+    scene.add(completedCloud);
+  }
+
+  addFrame(points, colors);
+  document.getElementById('status').textContent =
+    `${vertexCount.toLocaleString()} pts · ${isCompleted ? 'completed' : 'partial'} loaded`;
+}
+
+// ─── Before / After ───────────────────────────────────────────────────────────
+let showCompleted = false;
+
+function setMode(completed) {
+  if (completed && !completedCloud) {
+    document.getElementById('status').textContent = 'Drop a second .ply to load the completed version';
+    return;
+  }
+  showCompleted = completed;
+  const ind = document.getElementById('mode-indicator');
+  if (completed) {
+    if (partialCloud)   partialCloud.visible   = false;
+    if (completedCloud) completedCloud.visible = true;
+    ind.textContent = 'COMPLETED';
+    ind.classList.add('completed');
+    document.getElementById('toggleComplete').classList.add('active');
+  } else {
+    if (completedCloud) completedCloud.visible = false;
+    if (partialCloud)   partialCloud.visible   = true;
+    ind.textContent = 'PARTIAL';
+    ind.classList.remove('completed');
+    document.getElementById('toggleComplete').classList.remove('active');
+  }
+}
+
+document.getElementById('toggleComplete').addEventListener('click', () => setMode(!showCompleted));
+
+// ─── Split View ───────────────────────────────────────────────────────────────
+let splitMode = false;
+
+function setSplit(on) {
+  splitMode = on;
+  document.getElementById('toggleSplit').classList.toggle('active', on);
+  document.getElementById('split-label-left').style.display  = on ? 'block' : 'none';
+  document.getElementById('split-label-right').style.display = on ? 'block' : 'none';
+  document.getElementById('split-divider').style.display     = on ? 'block' : 'none';
+  if (!on) {
+    renderer.setScissorTest(false);
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+  }
+}
+
+document.getElementById('toggleSplit').addEventListener('click', () => setSplit(!splitMode));
+
+// ─── Keyboard Shortcuts ───────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'c' || e.key === 'C') setMode(!showCompleted);
+  if (e.key === 's' || e.key === 'S') setSplit(!splitMode);
 });
 
-// Drag and drop
-document.body.addEventListener('dragover', e => e.preventDefault());
-document.body.addEventListener('drop', async e => {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (!file || !file.name.endsWith('.ply')) return;
-  document.getElementById('status').textContent = 'Loading...';
-  const buffer = await file.arrayBuffer();
-  const { points, colors, vertexCount } = await loadPLY(buffer);
-  renderPointCloud(points, colors, vertexCount);
-});
-
-// ─── Controls ─────────────────────────────────────────────────────────────────
+// ─── Gaps Toggle ─────────────────────────────────────────────────────────────
 document.getElementById('toggleGaps').addEventListener('click', function() {
   gapsVisible = !gapsVisible;
   gapMeshes.forEach(m => m.visible = gapsVisible);
@@ -354,14 +504,87 @@ document.getElementById('toggleGaps').addEventListener('click', function() {
   this.classList.toggle('active', gapsVisible);
 });
 
+// ─── Reset Camera ─────────────────────────────────────────────────────────────
 document.getElementById('resetCamera').addEventListener('click', () => {
   spherical = { theta: 0, phi: Math.PI / 2, radius: 5 };
   target.set(0, 0, 0);
   updateCamera();
 });
 
-// ─── Load gaps from file ──────────────────────────────────────────────────────
-loadGaps('gaps.json');
+// ─── Timeline ────────────────────────────────────────────────────────────────
+let frames       = [];
+let currentFrame = 0;
+let playing      = false;
+let playInterval = null;
+
+function addFrame(points, colors) {
+  frames.push({ points, colors });
+  const slider = document.getElementById('frame-slider');
+  slider.disabled = false;
+  slider.max = frames.length - 1;
+  document.getElementById('frame-display').textContent = `${currentFrame} / ${frames.length - 1}`;
+}
+
+function setFrame(idx) {
+  if (!frames.length) return;
+  currentFrame = Math.max(0, Math.min(idx, frames.length - 1));
+  const f   = frames[currentFrame];
+  const src = showCompleted && completedCloud ? completedCloud : partialCloud;
+  if (src) {
+    const geo = src.geometry;
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(f.points, 3));
+    geo.setAttribute('color',    new THREE.Float32BufferAttribute(f.colors,  3));
+    geo.attributes.position.needsUpdate = true;
+    geo.attributes.color.needsUpdate    = true;
+  }
+  document.getElementById('frame-slider').value = currentFrame;
+  document.getElementById('frame-display').textContent = `${currentFrame} / ${frames.length - 1}`;
+}
+
+document.getElementById('frame-slider').addEventListener('input', e => setFrame(+e.target.value));
+
+const playBtn = document.getElementById('play-btn');
+playBtn.addEventListener('click', () => {
+  playing = !playing;
+  playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+  playBtn.classList.toggle('playing', playing);
+  if (playing) {
+    playInterval = setInterval(() => setFrame((currentFrame + 1) % Math.max(1, frames.length)), 100);
+  } else {
+    clearInterval(playInterval);
+  }
+});
+
+// ─── File Loading ─────────────────────────────────────────────────────────────
+let plyLoadCount = 0;
+
+async function handleFile(file) {
+  if (file.name.endsWith('.json')) {
+    try {
+      renderGaps(JSON.parse(await file.text()));
+      document.getElementById('status').textContent = `Gaps reloaded from ${file.name}`;
+    } catch {
+      document.getElementById('status').textContent = 'Invalid JSON file';
+    }
+    return;
+  }
+  if (!file.name.endsWith('.ply')) return;
+
+  document.getElementById('status').textContent = 'Loading...';
+  const { points, colors, vertexCount } = await parsePLY(await file.arrayBuffer());
+  const isCompleted = plyLoadCount >= 1;
+  plyLoadCount++;
+  renderPointCloud(points, colors, vertexCount, isCompleted);
+}
+
+document.getElementById('fileInput').addEventListener('change', async e => {
+  for (const file of e.target.files) await handleFile(file);
+});
+document.body.addEventListener('dragover', e => e.preventDefault());
+document.body.addEventListener('drop', async e => {
+  e.preventDefault();
+  for (const file of e.dataTransfer.files) await handleFile(file);
+});
 
 // ─── Resize ───────────────────────────────────────────────────────────────────
 window.addEventListener('resize', () => {
@@ -373,7 +596,32 @@ window.addEventListener('resize', () => {
 // ─── Render Loop ─────────────────────────────────────────────────────────────
 function animate() {
   requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+
+  if (splitMode && partialCloud && completedCloud) {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setScissorTest(true);
+
+    // Left — partial + gaps
+    partialCloud.visible   = true;
+    completedCloud.visible = false;
+    gapMeshes.forEach(m => m.visible = gapsVisible);
+    renderer.setViewport(0, 0, w / 2, h);
+    renderer.setScissor( 0, 0, w / 2, h);
+    renderer.render(scene, camera);
+
+    // Right — completed, no gaps
+    partialCloud.visible   = false;
+    completedCloud.visible = true;
+    gapMeshes.forEach(m => m.visible = false);
+    renderer.setViewport(w / 2, 0, w / 2, h);
+    renderer.setScissor( w / 2, 0, w / 2, h);
+    renderer.render(scene, camera);
+
+    renderer.setScissorTest(false);
+  } else {
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    renderer.render(scene, camera);
+  }
 }
 animate();
 </script>
