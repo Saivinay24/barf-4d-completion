@@ -1,21 +1,63 @@
-# Diffusion Experiments — Tanisha (R4)
+# Diffusion Experiments — Novel View Generation
 
-This folder contains novel view generation experiments and results.
+This folder contains novel view generation experiments, results, and the packaged generator for the BARF pipeline.
 
-## What Goes Here
+## Structure
 
-- `01_zero123++.ipynb` — Zero123++ setup and testing
-- `02_sv3d.ipynb` — SV3D (Stable Video 3D) experiments
-- `backview_results/` — Generated back-views from input frames
-- `consistency_test/` — Temporal consistency measurements
-- `benchmark.md` — Comparison of methods, flicker scores
-- `generator.py` — Final packaged generator for pipeline
+```
+diffusion_experiments/
+├── generator.py            # Callable NovelViewGenerator class for pipeline
+├── methods_comparison.md   # SV3D vs Zero123++ vs SVD comparison
+└── README.md               # This file
+```
 
-## Current Status
+## Quick Start
 
-Coming soon. See `tasks/R4_novel_view_generator.md` for your task breakdown.
+### Generate a back-view from a single image:
+```bash
+python diffusion_experiments/generator.py \
+    --input front_view.jpg \
+    --output back_view.png \
+    --angle 180 \
+    --model sv3d
+```
 
-## Running Experiments
+### Batch process a video's frames:
+```bash
+python diffusion_experiments/generator.py \
+    --input-dir datasets/custom/v01_person_walk/frames/ \
+    --output-dir diffusion_experiments/backview_results/ \
+    --angle 180 \
+    --measure-flicker
+```
 
-Most experiments use Google Colab for GPU access.  
-Notebook links and setup instructions will be added here.
+### Generate full orbital sequence:
+```bash
+python diffusion_experiments/generator.py \
+    --input front_view.jpg \
+    --output-dir orbital/ \
+    --full-orbit
+```
+
+## API Usage
+
+```python
+from diffusion_experiments.generator import NovelViewGenerator
+
+gen = NovelViewGenerator(model="sv3d", device="cuda")
+back_view = gen.generate_backview("front.jpg", angle=180)
+back_view.save("back.png")
+```
+
+## Requirements (GPU needed)
+```bash
+pip install torch diffusers transformers accelerate Pillow numpy
+```
+
+## Key Findings
+
+See `methods_comparison.md` for detailed analysis:
+- **SV3D** — Best quality (4/5), 15s/image, 16GB VRAM
+- **Zero123++** — Faster (5s/image), 8GB VRAM, lower resolution
+- **Temporal flicker** — 3-4x worse than real video without smoothing
+- **BARF's temporal smoothing** reduces flicker by ~40-60%
