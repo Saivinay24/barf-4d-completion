@@ -1,3 +1,4 @@
+// viewer/ply_loader.js
 async function loadPLY(url) {
     const response = await fetch(url);
     const buffer = await response.arrayBuffer();
