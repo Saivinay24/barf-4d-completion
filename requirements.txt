@@ -1,0 +1,27 @@
+# BARF — Core Dependencies
+# Install: pip install -r requirements.txt
+
+# Data processing
+opencv-python>=4.8
+Pillow>=10.0
+tqdm>=4.65
+numpy>=1.24
+
+# Depth estimation
+transformers>=4.35
+accelerate>=0.25
+torch>=2.0
+torchvision>=0.15
+
+# Gap detection
+open3d>=0.17
+scipy>=1.11
+
+# Novel view generation (GPU required)
+diffusers>=0.25
+
+# Temporal consistency (optional, for flow-based method)
+# torchvision includes RAFT
+
+# Metrics
+lpips>=0.1
