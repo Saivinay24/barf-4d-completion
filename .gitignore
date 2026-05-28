@@ -8,36 +8,28 @@ env/
 venv/
 ENV/
 .venv
+.pytest_cache/
 
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb
 
-# Large files
+# Large binary files (use Git LFS if needed)
 *.ply
 *.splat
 *.mp4
 *.avi
 *.mov
 *.mkv
+*.gif
 *.weights
 *.pth
 *.ckpt
 *.safetensors
 
-# Datasets (too large for Git)
-datasets/davis/
-datasets/sintel/
-datasets/*/frames/
-datasets/*/depth/
-datasets/*/masks/
-
-# Model outputs (use Git LFS or external storage)
-reconstructions/*.ply
-reconstructions/*.splat
-diffusion_experiments/*/generated_*
-diffusion_experiments/*/*.png
-diffusion_experiments/*/*.jpg
+# Model outputs
+outputs/
+data/gap_heatmaps/heatmaps/*.ppm
 
 # OS files
 .DS_Store
@@ -49,7 +41,21 @@ Thumbs.db
 *.swp
 *.swo
 
-# Temporary files
+# Temporary
 *.tmp
 *.log
 wandb/
+
+# Internal docs (not for GitHub)
+STATUS_*.md
+*conversation*.md
+*2026-*_*-*.md
+
+# Feb sprint large files (already in feb_sprint/ but gitignore the binaries)
+feb_sprint/**/*.mp4
+feb_sprint/**/*.gif
+feb_sprint/**/*.ply
+feb_sprint/**/*.pdf
+feb_sprint/**/*.ipynb
+feb_sprint/**/*.png
+feb_sprint/**/*.jpg

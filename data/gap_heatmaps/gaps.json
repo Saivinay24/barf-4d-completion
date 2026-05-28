@@ -1,0 +1,108 @@
+{
+  "input_ply": "data/test_plys/synthetic_front_facing.ply",
+  "n_points": 1103,
+  "voxel_size": 0.05,
+  "density_threshold": 5,
+  "vrc_coverage_score": 0.5,
+  "coverage": {
+    "per_angle": {
+      "0": {
+        "count": 317,
+        "covered": true,
+        "density": 0.2873980054397099
+      },
+      "45": {
+        "count": 501,
+        "covered": true,
+        "density": 0.4542157751586582
+      },
+      "90": {
+        "count": 257,
+        "covered": true,
+        "density": 0.23300090661831369
+      },
+      "135": {
+        "count": 0,
+        "covered": false,
+        "density": 0.0
+      },
+      "180": {
+        "count": 0,
+        "covered": false,
+        "density": 0.0
+      },
+      "225": {
+        "count": 0,
+        "covered": false,
+        "density": 0.0
+      },
+      "270": {
+        "count": 4,
+        "covered": false,
+        "density": 0.003626473254759746
+      },
+      "315": {
+        "count": 24,
+        "covered": true,
+        "density": 0.021758839528558477
+      }
+    },
+    "coverage_fraction": 0.5,
+    "covered_angles": [
+      0,
+      45,
+      90,
+      315
+    ],
+    "empty_angles": [
+      135,
+      180,
+      225,
+      270
+    ]
+  },
+  "gaps": [
+    {
+      "id": 0,
+      "center": [
+        0.5077769377161089,
+        -0.02277476526137434,
+        0.46794455533092977
+      ],
+      "size_m3": 1.1228750000000003,
+      "voxel_count": 8983,
+      "azimuth_deg": 42.662282876280045,
+      "elevation_deg": -1.8890639842605268,
+      "bounding_box": {
+        "min": [
+          0.0255160003900528,
+          -1.2209769248962403,
+          -0.023466999828815456
+        ],
+        "max": [
+          1.1755160003900529,
+          1.17902307510376,
+          1.1265330001711846
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_gaps": 1,
+    "total_gap_volume_m3": 1.1228750000000003,
+    "covered_angles": [
+      0,
+      45,
+      90,
+      315
+    ],
+    "empty_angles": [
+      135,
+      180,
+      225,
+      270
+    ],
+    "coverage_pct": 50.0,
+    "largest_gap_azimuth_deg": 42.662282876280045
+  }
+}
