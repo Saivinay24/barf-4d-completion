@@ -1,0 +1,32 @@
+{
+  "01_mdn_flower": {
+    "n_points": 2469517,
+    "width": 392,
+    "height": 252,
+    "num_frames": 25,
+    "w_h_T": 2469600,
+    "missing_vs_w_h_T": 83,
+    "frames_present": 25,
+    "artifact_type": "per-pixel monocular depth unprojection (one point per pixel per frame); NOT an optimised 4DGS reconstruction"
+  },
+  "02_w3schools_big_buck_bunny": {
+    "n_points": 2469369,
+    "width": 392,
+    "height": 252,
+    "num_frames": 25,
+    "w_h_T": 2469600,
+    "missing_vs_w_h_T": 231,
+    "frames_present": 25,
+    "artifact_type": "per-pixel monocular depth unprojection (one point per pixel per frame); NOT an optimised 4DGS reconstruction"
+  },
+  "03_samplelib_5s": {
+    "n_points": 2469541,
+    "width": 392,
+    "height": 252,
+    "num_frames": 25,
+    "w_h_T": 2469600,
+    "missing_vs_w_h_T": 59,
+    "frames_present": 25,
+    "artifact_type": "per-pixel monocular depth unprojection (one point per pixel per frame); NOT an optimised 4DGS reconstruction"
+  }
+}

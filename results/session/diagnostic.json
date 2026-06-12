@@ -1,0 +1,915 @@
+{
+  "01_mdn_flower": {
+    "capture_centered": {
+      "sector_counts": {
+        "0": 0,
+        "45": 0,
+        "90": 2469517,
+        "135": 0,
+        "180": 0,
+        "225": 0,
+        "270": 0,
+        "315": 0
+      },
+      "naive_coverage": {
+        "score": 0.125,
+        "tau": 5,
+        "covered_angles": [
+          90
+        ]
+      },
+      "vrc_r_full": {
+        "n_points": 2469517,
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "naive_coverage": {
+          "score": 0.125,
+          "tau": 5,
+          "covered_angles": [
+            90
+          ]
+        },
+        "c1_relative_density_coverage": {
+          "score": 0.125,
+          "rho": 0.1,
+          "per_angle": {
+            "0": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "45": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "90": {
+              "count": 2469517,
+              "covered": true,
+              "fraction_of_uniform_share": 8.0
+            },
+            "135": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "180": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "225": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "270": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "315": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            }
+          },
+          "covered_angles": [
+            90
+          ],
+          "empty_angles": [
+            0,
+            45,
+            135,
+            180,
+            225,
+            270,
+            315
+          ]
+        },
+        "c2_appearance_consistency": {
+          "score": 1.0,
+          "per_angle": {
+            "0": null,
+            "45": null,
+            "90": 1.0,
+            "135": null,
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90
+        },
+        "c3_structural_consistency": {
+          "score": 1.0,
+          "per_angle": {
+            "0": null,
+            "45": null,
+            "90": {
+              "nn_dist": 0.000743,
+              "score": 1.0
+            },
+            "135": null,
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90,
+          "nn_ref": 0.000743
+        },
+        "c4_temporal_coherence": {
+          "score": 0.9007,
+          "per_angle": {
+            "0": null,
+            "45": null,
+            "90": {
+              "mae": 0.041038,
+              "temporal_correlation": 0.9007,
+              "score": 0.9007
+            },
+            "135": null,
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "n_frames": 25
+        },
+        "gated_coverage": {
+          "score": 0.125,
+          "passing_angles": [
+            90
+          ],
+          "per_angle": {
+            "0": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "45": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "90": {
+              "density_ok": true,
+              "appearance": 1.0,
+              "structure": 1.0,
+              "passes": true
+            },
+            "135": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "180": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "225": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "270": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "315": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            }
+          },
+          "gates": {
+            "appearance": 0.5,
+            "structure": 0.5
+          }
+        },
+        "c4_over_passing_sectors": 0.9007,
+        "vrc_r": 0.1126,
+        "vrc_r_product": 0.1126
+      }
+    },
+    "centroid_centered": {
+      "sector_counts": {
+        "0": 129860,
+        "45": 488163,
+        "90": 386087,
+        "135": 343803,
+        "180": 235541,
+        "225": 223022,
+        "270": 553226,
+        "315": 109815
+      },
+      "naive_coverage": {
+        "score": 1.0,
+        "tau": 5,
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ]
+      },
+      "c1_relative_density": {
+        "score": 1.0,
+        "rho": 0.1,
+        "per_angle": {
+          "0": {
+            "count": 129860,
+            "covered": true,
+            "fraction_of_uniform_share": 0.4207
+          },
+          "45": {
+            "count": 488163,
+            "covered": true,
+            "fraction_of_uniform_share": 1.5814
+          },
+          "90": {
+            "count": 386087,
+            "covered": true,
+            "fraction_of_uniform_share": 1.2507
+          },
+          "135": {
+            "count": 343803,
+            "covered": true,
+            "fraction_of_uniform_share": 1.1137
+          },
+          "180": {
+            "count": 235541,
+            "covered": true,
+            "fraction_of_uniform_share": 0.763
+          },
+          "225": {
+            "count": 223022,
+            "covered": true,
+            "fraction_of_uniform_share": 0.7225
+          },
+          "270": {
+            "count": 553226,
+            "covered": true,
+            "fraction_of_uniform_share": 1.7922
+          },
+          "315": {
+            "count": 109815,
+            "covered": true,
+            "fraction_of_uniform_share": 0.3557
+          }
+        },
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ],
+        "empty_angles": []
+      }
+    },
+    "elapsed_s": 5.0
+  },
+  "02_w3schools_big_buck_bunny": {
+    "capture_centered": {
+      "sector_counts": {
+        "0": 9,
+        "45": 242574,
+        "90": 1934480,
+        "135": 292306,
+        "180": 0,
+        "225": 0,
+        "270": 0,
+        "315": 0
+      },
+      "naive_coverage": {
+        "score": 0.5,
+        "tau": 5,
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135
+        ]
+      },
+      "vrc_r_full": {
+        "n_points": 2469369,
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "naive_coverage": {
+          "score": 0.5,
+          "tau": 5,
+          "covered_angles": [
+            0,
+            45,
+            90,
+            135
+          ]
+        },
+        "c1_relative_density_coverage": {
+          "score": 0.375,
+          "rho": 0.1,
+          "per_angle": {
+            "0": {
+              "count": 9,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "45": {
+              "count": 242574,
+              "covered": true,
+              "fraction_of_uniform_share": 0.7859
+            },
+            "90": {
+              "count": 1934480,
+              "covered": true,
+              "fraction_of_uniform_share": 6.2671
+            },
+            "135": {
+              "count": 292306,
+              "covered": true,
+              "fraction_of_uniform_share": 0.947
+            },
+            "180": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "225": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "270": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "315": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            }
+          },
+          "covered_angles": [
+            45,
+            90,
+            135
+          ],
+          "empty_angles": [
+            0,
+            180,
+            225,
+            270,
+            315
+          ]
+        },
+        "c2_appearance_consistency": {
+          "score": 0.6627,
+          "per_angle": {
+            "0": null,
+            "45": 0.5852,
+            "90": 1.0,
+            "135": 0.4029,
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90
+        },
+        "c3_structural_consistency": {
+          "score": 0.7141,
+          "per_angle": {
+            "0": null,
+            "45": {
+              "nn_dist": 0.002244,
+              "score": 0.4853
+            },
+            "90": {
+              "nn_dist": 0.001089,
+              "score": 1.0
+            },
+            "135": {
+              "nn_dist": 0.001657,
+              "score": 0.6571
+            },
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90,
+          "nn_ref": 0.001089
+        },
+        "c4_temporal_coherence": {
+          "score": 0.4659,
+          "per_angle": {
+            "0": null,
+            "45": {
+              "mae": 0.187718,
+              "temporal_correlation": 0.5913,
+              "score": 0.5913
+            },
+            "90": {
+              "mae": 0.117841,
+              "temporal_correlation": 0.5774,
+              "score": 0.5774
+            },
+            "135": {
+              "mae": 0.240671,
+              "temporal_correlation": 0.2291,
+              "score": 0.2291
+            },
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "n_frames": 25
+        },
+        "gated_coverage": {
+          "score": 0.125,
+          "passing_angles": [
+            90
+          ],
+          "per_angle": {
+            "0": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "45": {
+              "density_ok": true,
+              "appearance": 0.5852,
+              "structure": 0.4853,
+              "passes": false
+            },
+            "90": {
+              "density_ok": true,
+              "appearance": 1.0,
+              "structure": 1.0,
+              "passes": true
+            },
+            "135": {
+              "density_ok": true,
+              "appearance": 0.4029,
+              "structure": 0.6571,
+              "passes": false
+            },
+            "180": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "225": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "270": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "315": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            }
+          },
+          "gates": {
+            "appearance": 0.5,
+            "structure": 0.5
+          }
+        },
+        "c4_over_passing_sectors": 0.5774,
+        "vrc_r": 0.0722,
+        "vrc_r_product": 0.0827
+      }
+    },
+    "centroid_centered": {
+      "sector_counts": {
+        "0": 365908,
+        "45": 453731,
+        "90": 152235,
+        "135": 296506,
+        "180": 447627,
+        "225": 286136,
+        "270": 228804,
+        "315": 238423
+      },
+      "naive_coverage": {
+        "score": 1.0,
+        "tau": 5,
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ]
+      },
+      "c1_relative_density": {
+        "score": 1.0,
+        "rho": 0.1,
+        "per_angle": {
+          "0": {
+            "count": 365908,
+            "covered": true,
+            "fraction_of_uniform_share": 1.1854
+          },
+          "45": {
+            "count": 453731,
+            "covered": true,
+            "fraction_of_uniform_share": 1.4699
+          },
+          "90": {
+            "count": 152235,
+            "covered": true,
+            "fraction_of_uniform_share": 0.4932
+          },
+          "135": {
+            "count": 296506,
+            "covered": true,
+            "fraction_of_uniform_share": 0.9606
+          },
+          "180": {
+            "count": 447627,
+            "covered": true,
+            "fraction_of_uniform_share": 1.4502
+          },
+          "225": {
+            "count": 286136,
+            "covered": true,
+            "fraction_of_uniform_share": 0.927
+          },
+          "270": {
+            "count": 228804,
+            "covered": true,
+            "fraction_of_uniform_share": 0.7413
+          },
+          "315": {
+            "count": 238423,
+            "covered": true,
+            "fraction_of_uniform_share": 0.7724
+          }
+        },
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ],
+        "empty_angles": []
+      }
+    },
+    "elapsed_s": 4.7
+  },
+  "03_samplelib_5s": {
+    "capture_centered": {
+      "sector_counts": {
+        "0": 0,
+        "45": 174587,
+        "90": 2007773,
+        "135": 287181,
+        "180": 0,
+        "225": 0,
+        "270": 0,
+        "315": 0
+      },
+      "naive_coverage": {
+        "score": 0.375,
+        "tau": 5,
+        "covered_angles": [
+          45,
+          90,
+          135
+        ]
+      },
+      "vrc_r_full": {
+        "n_points": 2469541,
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "naive_coverage": {
+          "score": 0.375,
+          "tau": 5,
+          "covered_angles": [
+            45,
+            90,
+            135
+          ]
+        },
+        "c1_relative_density_coverage": {
+          "score": 0.375,
+          "rho": 0.1,
+          "per_angle": {
+            "0": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "45": {
+              "count": 174587,
+              "covered": true,
+              "fraction_of_uniform_share": 0.5656
+            },
+            "90": {
+              "count": 2007773,
+              "covered": true,
+              "fraction_of_uniform_share": 6.5041
+            },
+            "135": {
+              "count": 287181,
+              "covered": true,
+              "fraction_of_uniform_share": 0.9303
+            },
+            "180": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "225": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "270": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            },
+            "315": {
+              "count": 0,
+              "covered": false,
+              "fraction_of_uniform_share": 0.0
+            }
+          },
+          "covered_angles": [
+            45,
+            90,
+            135
+          ],
+          "empty_angles": [
+            0,
+            180,
+            225,
+            270,
+            315
+          ]
+        },
+        "c2_appearance_consistency": {
+          "score": 0.9372,
+          "per_angle": {
+            "0": null,
+            "45": 0.9619,
+            "90": 1.0,
+            "135": 0.8497,
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90
+        },
+        "c3_structural_consistency": {
+          "score": 0.8889,
+          "per_angle": {
+            "0": null,
+            "45": {
+              "nn_dist": 0.001615,
+              "score": 0.9206
+            },
+            "90": {
+              "nn_dist": 0.001487,
+              "score": 1.0
+            },
+            "135": {
+              "nn_dist": 0.001993,
+              "score": 0.746
+            },
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "ref_angle": 90,
+          "nn_ref": 0.001487
+        },
+        "c4_temporal_coherence": {
+          "score": 0.4662,
+          "per_angle": {
+            "0": null,
+            "45": {
+              "mae": 0.21262,
+              "temporal_correlation": 0.3926,
+              "score": 0.3926
+            },
+            "90": {
+              "mae": 0.208761,
+              "temporal_correlation": 0.6373,
+              "score": 0.6373
+            },
+            "135": {
+              "mae": 0.274566,
+              "temporal_correlation": 0.3685,
+              "score": 0.3685
+            },
+            "180": null,
+            "225": null,
+            "270": null,
+            "315": null
+          },
+          "n_frames": 25
+        },
+        "gated_coverage": {
+          "score": 0.375,
+          "passing_angles": [
+            45,
+            90,
+            135
+          ],
+          "per_angle": {
+            "0": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "45": {
+              "density_ok": true,
+              "appearance": 0.9619,
+              "structure": 0.9206,
+              "passes": true
+            },
+            "90": {
+              "density_ok": true,
+              "appearance": 1.0,
+              "structure": 1.0,
+              "passes": true
+            },
+            "135": {
+              "density_ok": true,
+              "appearance": 0.8497,
+              "structure": 0.746,
+              "passes": true
+            },
+            "180": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "225": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "270": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            },
+            "315": {
+              "density_ok": false,
+              "appearance": null,
+              "structure": null,
+              "passes": false
+            }
+          },
+          "gates": {
+            "appearance": 0.5,
+            "structure": 0.5
+          }
+        },
+        "c4_over_passing_sectors": 0.4661,
+        "vrc_r": 0.1748,
+        "vrc_r_product": 0.1456
+      }
+    },
+    "centroid_centered": {
+      "sector_counts": {
+        "0": 315668,
+        "45": 211211,
+        "90": 99842,
+        "135": 237669,
+        "180": 113742,
+        "225": 540929,
+        "270": 529289,
+        "315": 421193
+      },
+      "naive_coverage": {
+        "score": 1.0,
+        "tau": 5,
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ]
+      },
+      "c1_relative_density": {
+        "score": 1.0,
+        "rho": 0.1,
+        "per_angle": {
+          "0": {
+            "count": 315668,
+            "covered": true,
+            "fraction_of_uniform_share": 1.0226
+          },
+          "45": {
+            "count": 211211,
+            "covered": true,
+            "fraction_of_uniform_share": 0.6842
+          },
+          "90": {
+            "count": 99842,
+            "covered": true,
+            "fraction_of_uniform_share": 0.3234
+          },
+          "135": {
+            "count": 237669,
+            "covered": true,
+            "fraction_of_uniform_share": 0.7699
+          },
+          "180": {
+            "count": 113742,
+            "covered": true,
+            "fraction_of_uniform_share": 0.3685
+          },
+          "225": {
+            "count": 540929,
+            "covered": true,
+            "fraction_of_uniform_share": 1.7523
+          },
+          "270": {
+            "count": 529289,
+            "covered": true,
+            "fraction_of_uniform_share": 1.7146
+          },
+          "315": {
+            "count": 421193,
+            "covered": true,
+            "fraction_of_uniform_share": 1.3644
+          }
+        },
+        "covered_angles": [
+          0,
+          45,
+          90,
+          135,
+          180,
+          225,
+          270,
+          315
+        ],
+        "empty_angles": []
+      }
+    },
+    "elapsed_s": 4.7
+  }
+}
