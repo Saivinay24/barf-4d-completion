@@ -111,7 +111,7 @@ def main():
             r = atk[s][v]
             label = (f"{SCENE_LABELS[s]} {VARIANT_LABELS[v]}"
                      if v != "original" else f"<strong>{SCENE_LABELS[s]}</strong>")
-            added = f"{r['n_added']:,}" if r["n_added"] else "&mdash;"
+            added = f"{r['n_added']:,}" if r["n_added"] else "&ndash;"
             rows.append(
                 f"<tr><td>{label}</td><td>{added}</td>"
                 f"<td>{f2(r['naive_coverage'])}</td>"

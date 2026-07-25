@@ -22,7 +22,7 @@
     padding: 0.5in 0;
   }
 
-  /* Title block — full width, centered */
+  /* Title block: full width, centered */
   .title-block {
     text-align: center;
     margin-bottom: 14pt;
@@ -57,7 +57,7 @@
     color: #333;
   }
 
-  /* Paper summary block — full width, indented */
+  /* Paper summary block: full width, indented */
   .paper-summary-block {
     margin: 0 0.4in 14pt 0.4in;
   }
@@ -82,7 +82,7 @@
     column-rule: none;
   }
 
-  /* Section headings — NeurIPS style */
+  /* Section headings: NeurIPS style */
   h2.section {
     font-size: 12pt;
     font-weight: bold;
@@ -104,7 +104,7 @@
     margin-bottom: 2pt;
   }
 
-  /* Paragraphs — NeurIPS: no indent, half-line space */
+  /* Paragraphs, NeurIPS: no indent, half-line space */
   p {
     text-align: justify;
     margin-bottom: 5.5pt;
@@ -147,7 +147,7 @@
     overflow: hidden;
   }
 
-  /* Tables — booktabs style */
+  /* Tables: booktabs style */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -287,8 +287,8 @@
 <div class="paper-summary-block">
   <h2>Abstract</h2>
   <p class="no-indent">
-    Generative 4D scene completion — synthesizing the unobserved regions of a
-    dynamic scene reconstructed from monocular video — is an emerging task with
+    Generative 4D scene completion, synthesizing the unobserved regions of a
+    dynamic scene reconstructed from monocular video, is an emerging task with
     no agreed evaluation protocol. Recent systems (Vivid4D, See4D, Fillerbuster)
     are evaluated by reconstruction fidelity at trajectory-adjacent views, which
     does not measure whether the unobserved portion of the viewing sphere has
@@ -301,14 +301,14 @@
     to 100% by inserting as few as 20 content-free points
     (&ldquo;dust&rdquo;), and re-centring the test sphere at the cloud centroid
     saturates coverage to 100% on <em>every</em> scene with no completion at all.
-    Second, we formalize a taxonomy of degenerate completions &mdash; dust, volumetric
-    chaff, temporally flickering chaff, and rotational clones &mdash; and show all of
+    Second, we formalize a taxonomy of degenerate completions (dust, volumetric
+    chaff, temporally flickering chaff, and rotational clones) and show all of
     them defeat naive coverage. We then construct <strong>VRC-R</strong>, a
     reference-free metric suite combining relative-density coverage, appearance
     consistency, local-structure consistency, and temporal coherence of turntable
     renders, and show empirically that it resists dust, chaff, and flicker
-    (mean attacked composite 0.12 vs. honest 0.12
-    &mdash; the attacks buy nothing)
+    (mean attacked composite 0.12 vs. honest 0.12;
+    the attacks buy nothing)
     while remaining monotonic in true coverage on ground-truth-controlled
     synthetic scenes (naive coverage under attack: flat at 1.0). Finally, we
     demonstrate a fundamental negative result: a rotational clone of observed
@@ -347,8 +347,8 @@ casual captures with a multi-view latent diffusion model.
 <p>
 How should such completions be evaluated? Reconstruction benchmarks reward
 fidelity at views <em>near the original trajectory</em> (PSNR, SSIM, LPIPS [13]
-against held-out frames), which is silent about the far side of the scene
-&mdash; precisely the region completion is supposed to fill. The obvious
+against held-out frames), which is silent about the far side of the scene,
+precisely the region completion is supposed to fill. The obvious
 alternative is some form of <em>angular coverage</em>: discretize the viewing
 sphere into test directions and check whether scene geometry exists at each.
 Coverage-style scores of exactly this form appear in project-stage evaluation
@@ -362,7 +362,7 @@ This paper is an adversarial audit of that idea, in the spirit of known
 critiques of generative-image metrics such as the Inception Score [15] and FID
 [14], and of Goodhart's law: <em>when a measure becomes a target, it ceases to
 be a good measure</em>. Our question is concrete: if a 4D completion method
-were optimized &mdash; or merely selected &mdash; to maximize an angular
+were optimized (or merely selected) to maximize an angular
 coverage score, what is the cheapest thing that score would accept? The answer,
 we show, is: almost anything.
 </p>
@@ -370,10 +370,10 @@ we show, is: almost anything.
 <p><strong>Contributions.</strong></p>
 <ol>
   <li><strong>A gameability taxonomy and audit.</strong> We define four families
-  of degenerate &ldquo;completions&rdquo; &mdash; <em>dust</em> (the minimum
+  of degenerate &ldquo;completions&rdquo;: <em>dust</em> (the minimum
   point count that flips a thresholded metric), <em>chaff</em> (full-density
   volumetric noise), <em>flicker chaff</em> (chaff resampled per frame), and
-  <em>clone</em> (observed content rotated into unobserved sectors) &mdash; and
+  <em>clone</em> (observed content rotated into unobserved sectors). We
   show that each one drives a naive coverage metric to 100% on real monocular
   scenes, with dust requiring only 20&ndash;35
   inserted points against clouds of ~2.5M points. We further document a
@@ -381,22 +381,22 @@ we show, is: almost anything.
   instead of the capture camera saturates the metric on 2.5D depth sheets
   without any attack.</li>
   <li><strong>VRC-R, an audited reference-free metric suite.</strong> Four
-  sub-metrics &mdash; relative-density coverage, appearance consistency,
-  local-structure consistency, and temporal coherence of CPU turntable renders
-  &mdash; each engineered against a specific attack family, combined by
+  sub-metrics (relative-density coverage, appearance consistency,
+  local-structure consistency, and temporal coherence of CPU turntable renders),
+  each engineered against a specific attack family, combined by
   per-sector gating (we show the naive product-of-means composite leaks: chaff
   can profit from it). On ground-truth-controlled synthetic scenes VRC-R is
   monotonic in true coverage and is not inflated by chaff, while naive coverage
   is gamed flat to 1.0.</li>
   <li><strong>A negative result with practical consequences.</strong> The clone
-  attack &mdash; temporally coherent, structurally real, chromatically real,
-  and wrong &mdash; passes the reference-free suite (mean VRC-R
+  attack (temporally coherent, structurally real, chromatically real,
+  and wrong) passes the reference-free suite (mean VRC-R
   0.62 on real scenes, vs. 0.12 honest; every
   gate passed on two of three scenes). Reference-based quality computed against
   ground truth on synthetic scenes detects it immediately
-  (0.21 vs. 1.00 by construction). We argue this boundary &mdash;
-  reference-free metrics certify <em>plausibility</em>, never
-  <em>correctness</em> &mdash; should be stated explicitly by any future 4D
+  (0.21 vs. 1.00 by construction). We argue this boundary
+  (reference-free metrics certify <em>plausibility</em>, never
+  <em>correctness</em>) should be stated explicitly by any future 4D
   completion benchmark.</li>
 </ol>
 
@@ -459,10 +459,10 @@ actually are, because honest provenance turns out to matter for metric design.
 Each scene ships as a PLY labelled &ldquo;exported from NeoVerse reconstructor.&rdquo;
 The point counts tell a different story: every cloud contains within 240 points of
 392&nbsp;&times;&nbsp;252&nbsp;&times;&nbsp;25&nbsp;=&nbsp;2,469,600 points
-(Table&nbsp;1) &mdash; exactly one point per pixel per frame at the pipeline's
+(Table&nbsp;1): exactly one point per pixel per frame at the pipeline's
 internal resolution. These artifacts are therefore <em>per-pixel monocular
-depth unprojections</em> of 25 video frames &mdash; 2.5D depth sheets fused
-across time &mdash; not optimized 4D Gaussian-Splat reconstructions. We use
+depth unprojections</em> of 25 video frames (2.5D depth sheets fused
+across time), not optimized 4D Gaussian-Splat reconstructions. We use
 them as representative of the <em>geometry distribution</em> a monocular
 pipeline produces (a partial shell facing the camera), which is the input
 regime any completion metric must handle, and we refer to them as
@@ -508,7 +508,7 @@ Cov<sub>naive</sub>(S) = (1/|&Theta;|) &Sigma;<sub>&theta;</sub>
 <p>
 On the three depth-unprojection scenes, with <em>c</em> at the capture camera,
 Cov<sub>naive</sub> reports 12.5%, 50.0%, and
-37.5% respectively (Figure&nbsp;1) &mdash; the honest diagnosis that
+37.5% respectively (Figure&nbsp;1): the honest diagnosis that
 motivated generative completion in the first place: most of the viewing sphere
 has no geometry at all.
 </p>
@@ -531,9 +531,9 @@ natural-looking choice is the point-cloud centroid (&ldquo;orbit the
 scene&rdquo;). But a fronto-parallel depth sheet is a slab in space, and its
 centroid lies <em>inside</em> the slab: points then surround the centre at
 every azimuth, and coverage saturates. Empirically, centroid-centred
-Cov<sub>naive</sub> is 100% on all three scenes &mdash; and so is the
+Cov<sub>naive</sub> is 100% on all three scenes, and so is the
 relative-density variant C1 introduced below (1.00 on all
-scenes) &mdash; even though nothing was completed and a VR user walking behind
+scenes), even though nothing was completed and a VR user walking behind
 the sheet would see a hollow shell. Capture-centred measurement, which asks
 &ldquo;in how many directions from the capture point does geometry
 exist,&rdquo; reports 12.5&ndash;50.0%. All subsequent
@@ -559,7 +559,7 @@ deterministic given a seed (implementation:
   observed sectors, with uniform-random colours; the same chaff appears in
   every frame (temporally static).</li>
   <li><strong>Flicker chaff.</strong> As chaff, but resampled independently
-  per frame &mdash; the temporal failure mode the red-team analysis predicted
+  per frame: the temporal failure mode the red-team analysis predicted
   for unconstrained generative samplers.</li>
   <li><strong>Clone.</strong> Rotate a copy of the densest observed sector
   about the vertical axis into each empty sector, preserving real colours,
@@ -590,7 +590,7 @@ alone a training objective.
 <p>
 We construct four reference-free sub-metrics, each targeting one attack
 family, and combine them multiplicatively (any sub-metric near zero collapses
-the composite &mdash; intentional, since a scene that fails any one test is
+the composite, intentional, since a scene that fails any one test is
 not VR-complete). Implementation: <code>src/metrics/robust_vrc.py</code>.
 </p>
 
@@ -608,7 +608,7 @@ Per sector, an 8&times;8&times;8 RGB histogram is compared by Jensen&ndash;Shann
 divergence to a reference sector; the score is 1&nbsp;&minus;&nbsp;JS averaged
 over populated sectors. The reference is the most <em>surface-like</em>
 (smallest mean nearest-neighbour distance) sector among those holding &ge;25%
-of the maximum sector count &mdash; selecting the reference by density alone
+of the maximum sector count; selecting the reference by density alone
 is itself gameable by density-matched chaff, a failure we hit and fixed during
 the audit.
 </p>
@@ -619,7 +619,7 @@ Real reconstructed geometry is locally a surface: nearest-neighbour distances
 are small relative to point count. Volumetric chaff at the same density has
 systematically larger nearest-neighbour distances. Per sector we compute the
 mean nearest-neighbour distance over a 5,000-point subsample (after removing
-exact duplicates &mdash; replicating one point set across frames adds no
+exact duplicates: replicating one point set across frames adds no
 geometry and must not lower the statistic) and score
 nn<sub>ref</sub>&nbsp;/&nbsp;max(nn<sub>sector</sub>,&nbsp;nn<sub>ref</sub>).
 </p>
@@ -649,7 +649,7 @@ Our first composite was the obvious one: the product of the four sub-metric
 means. It leaks. Chaff saturates C1 (8/8 dense sectors) while C2/C3 means
 average the damage over sectors, and on ablated synthetic scenes the
 product composite under chaff <em>exceeded</em> the honest score (0.19 vs.
-0.12 at true coverage 1/8) &mdash; the attack profited. The audited composite
+0.12 at true coverage 1/8): the attack profited. The audited composite
 instead gates per sector: a sector counts toward coverage only if it passes
 the density test <em>and</em> scores &ge;0.5 on both appearance and structure;
 coherence is then averaged over passing sectors only:
@@ -680,17 +680,17 @@ the attacks and metrics (135 tests) passes with
 
 <table>
 <tr><th>Scene / variant</th><th>+pts</th><th>naive</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>gated</th><th>VRC-R</th></tr>
-<tr><td><strong>S1</strong></td><td>&mdash;</td><td>0.12</td><td>0.12</td><td>1.00</td><td>1.00</td><td>0.90</td><td>0.12</td><td><strong>0.11</strong></td></tr>
+<tr><td><strong>S1</strong></td><td>&ndash;</td><td>0.12</td><td>0.12</td><td>1.00</td><td>1.00</td><td>0.90</td><td>0.12</td><td><strong>0.11</strong></td></tr>
 <tr><td>S1 +dust</td><td>35</td><td>1.00</td><td>0.12</td><td>1.00</td><td>1.00</td><td>0.90</td><td>0.12</td><td><strong>0.11</strong></td></tr>
 <tr><td>S1 +chaff</td><td>17,286,500</td><td>1.00</td><td>1.00</td><td>0.42</td><td>0.27</td><td>0.99</td><td>0.12</td><td><strong>0.12</strong></td></tr>
 <tr><td>S1 +flicker</td><td>17,286,500</td><td>1.00</td><td>1.00</td><td>0.42</td><td>0.54</td><td>0.12</td><td>0.12</td><td><strong>0.12</strong></td></tr>
 <tr><td>S1 +clone</td><td>17,286,619</td><td>1.00</td><td>1.00</td><td>1.00</td><td>0.99</td><td>0.92</td><td>1.00</td><td><strong>0.92</strong></td></tr>
-<tr><td><strong>S2</strong></td><td>&mdash;</td><td>0.50</td><td>0.38</td><td>0.66</td><td>0.71</td><td>0.47</td><td>0.12</td><td><strong>0.07</strong></td></tr>
+<tr><td><strong>S2</strong></td><td>&ndash;</td><td>0.50</td><td>0.38</td><td>0.66</td><td>0.71</td><td>0.47</td><td>0.12</td><td><strong>0.07</strong></td></tr>
 <tr><td>S2 +dust</td><td>20</td><td>1.00</td><td>0.38</td><td>0.66</td><td>0.71</td><td>0.47</td><td>0.12</td><td><strong>0.07</strong></td></tr>
 <tr><td>S2 +chaff</td><td>1,069,700</td><td>1.00</td><td>0.88</td><td>0.46</td><td>0.38</td><td>0.77</td><td>0.12</td><td><strong>0.07</strong></td></tr>
 <tr><td>S2 +flicker</td><td>1,069,700</td><td>1.00</td><td>0.88</td><td>0.46</td><td>0.51</td><td>0.20</td><td>0.12</td><td><strong>0.07</strong></td></tr>
 <tr><td>S2 +clone</td><td>7,737,920</td><td>1.00</td><td>0.88</td><td>0.86</td><td>0.87</td><td>0.54</td><td>0.62</td><td><strong>0.37</strong></td></tr>
-<tr><td><strong>S3</strong></td><td>&mdash;</td><td>0.38</td><td>0.38</td><td>0.94</td><td>0.89</td><td>0.47</td><td>0.38</td><td><strong>0.17</strong></td></tr>
+<tr><td><strong>S3</strong></td><td>&ndash;</td><td>0.38</td><td>0.38</td><td>0.94</td><td>0.89</td><td>0.47</td><td>0.38</td><td><strong>0.17</strong></td></tr>
 <tr><td>S3 +dust</td><td>25</td><td>1.00</td><td>0.38</td><td>0.94</td><td>0.89</td><td>0.47</td><td>0.38</td><td><strong>0.17</strong></td></tr>
 <tr><td>S3 +chaff</td><td>1,435,875</td><td>1.00</td><td>1.00</td><td>0.54</td><td>0.41</td><td>0.80</td><td>0.38</td><td><strong>0.17</strong></td></tr>
 <tr><td>S3 +flicker</td><td>1,435,875</td><td>1.00</td><td>1.00</td><td>0.54</td><td>0.57</td><td>0.18</td><td>0.38</td><td><strong>0.17</strong></td></tr>
@@ -701,7 +701,7 @@ Gameability audit, capture-centred, all three real scenes. Naive coverage is
 gamed to 1.00 by every attack. VRC-R holds dust at the honest baseline
 (C1 unchanged), suppresses chaff via C2/C3, and additionally punishes flicker
 via C4. The clone largely passes the reference-free suite (all gates on S1
-and S3) &mdash; the documented blind spot. Artifact:
+and S3): the documented blind spot. Artifact:
 <code>results/session/attack_table.json</code>.</p>
 
 <div class="figure">
@@ -715,13 +715,13 @@ and S3) &mdash; the documented blind spot. Artifact:
 
 <p>
 Three observations. First, dust leaves every robust sub-metric essentially
-untouched &mdash; C1 simply refuses to count the dusted sectors, so the
+untouched: C1 simply refuses to count the dusted sectors, so the
 composite stays at the honest-scene level. Second, chaff is rejected twice
 over: random colours collapse C2 to ~0.47 and volumetric
 structure collapses C3 to ~0.35, so even chaff painted with
 plausible colours would fail. Third, the flicker variant additionally drops
 C4 from 0.85 (static chaff) to 0.17, isolating
-temporal instability as an independently measurable failure &mdash; the
+temporal instability as an independently measurable failure: the
 red-team's &ldquo;coverage&ndash;coherence paradox&rdquo; is real but
 measurable, not paradoxical.
 </p>
@@ -729,13 +729,13 @@ measurable, not paradoxical.
 <h3 class="subsection">6.2&nbsp;&nbsp;Validation on ground-truth-controlled synthetic scenes</h3>
 <p>
 A metric must not only resist attacks; it must track the quantity it claims to
-measure. We build a synthetic scene that is complete by construction &mdash; a
+measure. We build a synthetic scene that is complete by construction: a
 cylindrical surface band carrying a high-frequency procedural texture whose
 per-sector colour histograms are nearly identical (satisfying C2's
 stationarity assumption) while its spatial phase is azimuth-unique (so cloned
 content is provably wrong under reference comparison), plus an orbiting bright
 marker providing temporal dynamics (400,000 points,
-10 frames) &mdash; then ablate it to known true coverage k/8,
+10 frames), then ablate it to known true coverage k/8,
 k&nbsp;=&nbsp;1&hellip;8, and score every ablation honestly and under attack.
 </p>
 
@@ -746,7 +746,7 @@ k&nbsp;=&nbsp;1&hellip;8, and score every ablation honestly and under attack.
   (a) Naive coverage tracks truth when honest but is gamed flat to 1.0 by
   chaff at every ablation level. (b) VRC-R is monotonic in true coverage,
   stays near the honest value under chaff, but is inflated by the clone
-  (orange) &mdash; which ground-truth quality at the ablated angles (purple,
+  (orange), which ground-truth quality at the ablated angles (purple,
   Q&nbsp;&asymp;&nbsp;0.13&ndash;0.42) exposes. Artifact:
   <code>results/session/synthetic_validation.json</code>.</p>
 </div>
@@ -755,18 +755,18 @@ k&nbsp;=&nbsp;1&hellip;8, and score every ablation honestly and under attack.
 Honest VRC-R increases from 0.10 at true coverage 1/8 to
 0.70 at 8/8 (Spearman &rho;&nbsp;=&nbsp;1.00 across the
 eight ablation levels), while naive coverage under chaff attack is constant at
-1.0 across all levels &mdash; carrying zero information about the underlying
+1.0 across all levels, carrying zero information about the underlying
 scene. Chaff-attacked VRC-R stays within 0.002 of the honest
 value at every level: the attack buys essentially nothing. The honest curve
 sits below the ideal diagonal because C4 charges genuine scene dynamics (the
-orbiting marker) a small coherence cost &mdash; a conservative bias we accept,
+orbiting marker) a small coherence cost, a conservative bias we accept,
 discussed in Section&nbsp;8.
 </p>
 
 <h3 class="subsection">6.3&nbsp;&nbsp;The clone blind spot, and what catches it</h3>
 <p>
 The clone attack produces temporally coherent, structurally real, chromatically
-real content &mdash; it is, after all, real content, in the wrong place. On
+real content: it is, after all, real content, in the wrong place. On
 real scenes it scores mean VRC-R 0.62 (vs. 0.12
 for the honest originals), passing every per-sector gate on S1 and S3 (gated
 coverage 1.00; on S2 a minority of cloned sectors trip the appearance gate
@@ -786,15 +786,15 @@ ablated angles is 0.21 for the clone, versus
   Turntable renders (middle frame) of scene S2 at 90&deg;, 180&deg;, 270&deg;,
   0&deg;: original (top) vs. clone-completed (bottom). The clone fills every
   azimuth with photometrically and structurally plausible content that no
-  reference-free metric in this paper &mdash; or, we argue, any &mdash; can
+  reference-free metric in this paper (or, we argue, any) can
   flag as wrong. Generated by <code>scripts/make_figures.py</code>.</p>
 </div>
 
 <div class="result-box">
 <strong>The boundary of reference-free evaluation.</strong> Reference-free
-completeness metrics can certify <em>necessity conditions</em> &mdash;
+completeness metrics can certify <em>necessity conditions</em>:
 geometry exists everywhere (C1), looks like the scene (C2), is locally
-surface-like (C3), and is temporally stable (C4) &mdash; but cannot certify
+surface-like (C3), and is temporally stable (C4). But they cannot certify
 <em>correctness</em>. Benchmarks for generative 4D completion should therefore
 pair VRC-R-style audits with reference-based evaluation on
 ground-truth-complete data (synthetic scenes or multi-camera captures), and
@@ -808,7 +808,7 @@ Fillerbuster each report image-fidelity metrics at views near the input
 trajectory. Our results suggest a concrete protocol upgrade for this line of
 work: (i) report capture-centred VRC-R on the full sphere, so that
 &ldquo;the method completed the scene&rdquo; is a measured claim rather than a
-rendered teaser; (ii) report it alongside attacks &mdash; a benchmark that
+rendered teaser; (ii) report it alongside attacks: a benchmark that
 publishes its attack suite makes metric-gaming a falsifiable accusation rather
 than a suspicion; (iii) where any ground truth exists, report reference-based
 quality at the unobserved angles separately from trajectory-adjacent fidelity,
@@ -821,7 +821,7 @@ its objections are confirmed and quantified here: the coverage&ndash;coherence
 optimization tension (measurable as C1 vs. C4, Section&nbsp;6.1) and the
 under-determination of unobserved 4D content (the clone result, Section&nbsp;6.3:
 plausibility is checkable, correctness is not, so unconstrained generative
-completion cannot be <em>verified</em> reference-free &mdash; only
+completion cannot be <em>verified</em> reference-free, only
 falsified). The audit framework is exactly the re-scope that analysis
 recommended, executed with attacks it did not anticipate (dust, centring).
 </p>
@@ -856,8 +856,8 @@ implausible symmetries even without references.
 <h2 class="section">9&nbsp;&nbsp;Conclusion</h2>
 <p>
 We audited the evaluation foundation of generative 4D scene completion before
-the field standardizes one. Naive angular coverage &mdash; the obvious metric,
-and the one our own project shipped &mdash; is defeated by five points per
+the field standardizes one. Naive angular coverage (the obvious metric,
+and the one our own project shipped) is defeated by five points per
 sector, by its own centring parameter, and by every degenerate completion we
 constructed. The audited replacement, VRC-R, is empirically monotonic in true
 completeness and resistant to dust, chaff, and flicker; and the one attack
@@ -889,13 +889,6 @@ against adversaries rather than against hope.
 <p class="ref-entry">[13] Zhang et al. The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. CVPR 2018. arXiv:1801.03924, 2018.</p>
 <p class="ref-entry">[14] Heusel et al. GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium. NeurIPS 2017. arXiv:1706.08500, 2017.</p>
 <p class="ref-entry">[15] Barratt and Sharma. A Note on the Inception Score. arXiv:1801.01973, 2018.</p>
-</div>
-
-<div class="footnote">
-Code, attacks, metrics, raw result artifacts, and a one-command reproduction
-script (<code>scripts/reproduce.sh</code>) are available in the project
-repository. Every number in this paper maps to a committed artifact and the
-command that produced it; see <code>paper/REPRODUCIBILITY.md</code>.
 </div>
 
 </body>
