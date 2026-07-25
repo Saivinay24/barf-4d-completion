@@ -2,7 +2,7 @@
 
 ## Status
 - Repo used: `cap4d` (`https://github.com/felixtaubner/cap4d`)
-- Same input video used for local run attempt: `/Users/shritaake/Desktop/Code/BARF/video.mp4`
+- Same input video used for local run attempt: `video.mp4`
 - Local run attempt: **blocked** on this machine
 - Main blockers:
   - missing `decord` wheel for this local Python setup
@@ -13,7 +13,7 @@
 ```bash
 python3 -m pip install omegaconf pytorch-lightning einops scipy==1.13.1 chumpy gsplat plyfile roma matplotlib
 PYTHONPATH=$(realpath "./"):$PYTHONPATH python3 cap4d/inference/generate_images.py --config_path configs/generation/debug.yaml --reference_data_path examples/input/tesla/ --output_path examples/debug_output/tesla/
-CAP4D_PATH=$(realpath "./") PIXEL3DMM_PATH=$(realpath "../pixel3dmm") bash scripts/generate_avatar.sh /Users/shritaake/Desktop/Code/BARF/video.mp4 /Users/shritaake/Desktop/Code/BARF/research/benchmark_outputs/cap4d/local_run debug
+CAP4D_PATH=$(realpath "./") PIXEL3DMM_PATH=$(realpath "../pixel3dmm") bash scripts/generate_avatar.sh video.mp4 benchmark_outputs/cap4d/local_run debug
 ```
 
 ## Errors That Stop Local Execution

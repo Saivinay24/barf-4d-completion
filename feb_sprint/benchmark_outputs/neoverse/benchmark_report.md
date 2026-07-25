@@ -3,7 +3,7 @@
 ## Reality Check
 - GitHub: `https://github.com/IamCreateAI/NeoVerse` (public, repo reachable)
 - Hugging Face: `https://huggingface.co/Yuppie1204/NeoVerse` (model page referenced on project site)
-- Local repo presence: `/Users/shritaake/Desktop/Code/BARF/NeoVerse`
+- Local repo: cloned from `https://github.com/IamCreateAI/NeoVerse`
 
 ## Status
 - Time-optimized path used: **official demo evidence**

@@ -46,10 +46,6 @@ Thumbs.db
 *.log
 wandb/
 
-# Internal docs (not for GitHub)
-STATUS_*.md
-*conversation*.md
-*2026-*_*-*.md
 
 # Feb sprint large files (already in feb_sprint/ but gitignore the binaries)
 feb_sprint/**/*.mp4

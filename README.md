@@ -42,8 +42,6 @@ Unlike prior work (Vivid4D, See4D) that conditions generative completion on 2D f
 
 This split is intentional: everything that could be built and proven without a GPU cluster (the metric, the audit, the pipeline plumbing, the export/viewer) is done and tested. The generative completion inference itself is the next phase, gated on GPU time.
 
-See `shrit_phase0/` for the exact handoff spec for that GPU run.
-
 ## Architecture
 
 ```
@@ -92,10 +90,11 @@ barf-4d-completion/
 │       └── export_splat.py         # Quest-compatible .splat exporter
 │
 ├── scripts/
-│   ├── run_pipeline.sh             # End-to-end: video → D4RT → NeoVerse → gaps → completion
-│   ├── run_vivid4d_baseline.sh     # Vivid4D baseline for ablation comparison
 │   ├── run_all_experiments.py      # E0-E3 experiment runner behind the paper's numbers
-│   └── build_paper.py              # Substitutes every paper number from committed artifacts
+│   ├── build_paper.py              # Substitutes every paper number from committed artifacts
+│   ├── make_figures.py             # Generates all paper figures from result artifacts
+│   ├── prepare_data.py             # Converts PLY scenes to npz format
+│   └── reproduce.sh                # End-to-end reproducibility script
 │
 ├── tests/                          # 135 tests, all passing
 │
@@ -106,11 +105,7 @@ barf-4d-completion/
 ├── viewer/                         # Web-based 3D viewer (PLY loader, gap viz)
 ├── data/                           # Test scenes + generated heatmaps
 ├── results/session/                # Raw artifacts behind every paper number
-│
-├── MASTER_PLAN.md                  # Competitive analysis + phased roadmap
-├── BARF_REFERENCE.md               # Tech stack + architecture reference
 ├── BARF_VRC_SCORE.md               # VRC-Score formal mathematical definition
-├── shrit_phase0/                   # GPU handoff spec for the pending completion run
 │
 └── feb_sprint/                     # Archived Feb 2026 sprint (original recon + benchmarking)
 ```
@@ -141,10 +136,10 @@ python3 -m src.gap_detection.detect_gaps \
     --output_heatmap_dir heatmaps/
 ```
 
-### Run the Full Pipeline (GPU required for D4RT + NeoVerse steps)
+### Reproduce All Paper Results
 
 ```bash
-bash scripts/run_pipeline.sh path/to/video.mp4 outputs/my_scene/
+bash scripts/reproduce.sh
 ```
 
 ### Export to Quest-Compatible .splat

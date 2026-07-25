@@ -10,7 +10,7 @@ carry this provenance in their metadata.
 
 Usage:
     python3 scripts/prepare_data.py \
-        --src /Users/saivinay/Downloads/colab_eval_uncapped \
+        --src path/to/colab_eval_uncapped \
         --dst data/scenes
 """
 
@@ -47,7 +47,7 @@ def load_ply_fast(ply_path: str):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--src", default="/Users/saivinay/Downloads/colab_eval_uncapped")
+    ap.add_argument("--src", required=True, help="Path to Colab PLY output directory")
     ap.add_argument("--dst", default="data/scenes")
     args = ap.parse_args()
     os.makedirs(args.dst, exist_ok=True)
