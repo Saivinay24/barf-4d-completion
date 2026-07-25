@@ -564,7 +564,19 @@ const FPS = 12; // default playback speed
 let gapMeshes = [];
 let gapsVisible = true;
 
-function renderGaps(gaps) {
+function normalizeGaps(gapsJson) {
+  const gaps = Array.isArray(gapsJson) ? gapsJson : gapsJson.gaps;
+  if (!Array.isArray(gaps)) {
+    throw new Error('Gap JSON must be an array or an object with a gaps array');
+  }
+  return gaps.map(gap => ({
+    center: gap.center,
+    size: gap.size ?? gap.size_m3 ?? 1,
+  })).filter(gap => Array.isArray(gap.center) && gap.center.length >= 3);
+}
+
+function renderGaps(gapsJson) {
+  const gaps = normalizeGaps(gapsJson);
   gapMeshes.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
   gapMeshes = [];
   gaps.forEach(gap => {
@@ -577,6 +589,7 @@ function renderGaps(gaps) {
     scene.add(sphere);
     gapMeshes.push(sphere);
   });
+  return gaps.length;
 }
 
 function setGapVisibility(v) {
@@ -835,8 +848,8 @@ async function loadGapsFile(file) {
   try {
     const text = await file.text();
     const gaps = JSON.parse(text);
-    renderGaps(gaps);
-    setStatus(`Gaps loaded: ${gaps.length} regions`);
+    const gapCount = renderGaps(gaps);
+    setStatus(`Gaps loaded: ${gapCount} regions`);
     applyVisibility();
   } catch (err) {
     console.error('Failed to load gaps JSON:', err);
