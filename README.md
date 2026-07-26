@@ -151,24 +151,17 @@ python3 -m src.vr.export_splat \
     --max_gaussians 500000
 ```
 
-## Competitive Landscape
+## Related Work
 
-BARF sits at the intersection of 4D reconstruction and generative scene completion, a gap no existing method fills:
+BARF sits at the intersection of 4D reconstruction and generative scene completion:
 
-| Method | Monocular | 4D Temporal | Gen. Completion | VR-Ready |
-|---|:---:|:---:|:---:|:---:|
-| Google D4RT | ✅ | ✅ | ❌ | ❌ |
-| NeoVerse (CVPR 2026) | ✅ | ✅ | Partial | ❌ |
-| Vivid4D (ICCV 2025) | ✅ | ✅ | ✅ (recon-focused) | ❌ |
-| NVIDIA Lyra 2.0 | ✅ | ❌ Static | ✅ | ❌ |
-| World Labs Marble | ✅ | ❌ Static | ✅ | ❌ |
-| **BARF (Ours)** | ✅ | ✅ | ✅ | ✅ |
-
-## Target Venues
-
-1. **CVPR 2027** (submission ~Nov 2026), primary target
-2. **SIGGRAPH Asia 2026** (submission ~Jul 2026), if fast-tracked
-3. **ICCV 2027**, backup
+| Method | Monocular | 4D Temporal | Gen. Completion |
+|---|:---:|:---:|:---:|
+| Google D4RT | ✅ | ✅ | ❌ |
+| NeoVerse (CVPR 2026) | ✅ | ✅ | Partial |
+| Vivid4D (ICCV 2025) | ✅ | ✅ | ✅ (recon-focused) |
+| Full-4D (2026) | ✅ | ✅ | ✅ |
+| **BARF (Ours)** | ✅ | ✅ | Evaluation & metrics |
 
 ## Tech Stack
 
@@ -184,11 +177,10 @@ BARF sits at the intersection of 4D reconstruction and generative scene completi
 ## Citation
 
 ```bibtex
-@article{bhoomireddy2026barf,
-  title={BARF: Generative 4D Completion for VR-Complete Scene Navigation},
-  author={Bhoomireddy, Sai Vinay and others},
-  year={2026},
-  note={Under preparation for CVPR 2027}
+@article{bhoomireddy2026gaming,
+  title={Gaming the Sphere: A Gameability Audit of VR-Completeness Metrics for Generative 4D Scene Completion},
+  author={Bhoomireddy, Sai Vinay and Aditya and Srivastava, Aryan and Shrivastava, Shrit and Tanisha and Patnaik, Palak},
+  year={2026}
 }
 ```
 
@@ -198,4 +190,4 @@ MIT License, see [LICENSE](LICENSE) for details.
 
 ---
 
-**Lead:** [Sai Vinay Bhoomireddy](https://github.com/Saivinay24)
+**Team:** [Sai Vinay Bhoomireddy](https://github.com/Saivinay24), Aditya, Aryan Srivastava, Shrit Shrivastava, Tanisha, Palak Patnaik
