@@ -1,6 +1,6 @@
-# BARF: VR-Complete 4D Scene Generation
+# BARF — Binarily Augmented Reality Footage
 
-> **Transform any phone video into a fully explorable 4D VR world, including the parts the camera never saw.**
+> **Can we transform a single monocular video into a complete, explorable 360° 4D scene by generating everything the camera never saw?**
 
 [![Tests](https://img.shields.io/badge/tests-135%20passed-brightgreen)]()
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue)]()
@@ -8,181 +8,85 @@
 
 ---
 
-## The Problem
+## What This Project Is
 
-Current 4D reconstruction methods (D4RT, NeoVerse, Vivid4D) turn video into 3D scenes, but only what the camera saw. Film someone from the front, and the back of their head is empty. You can't walk behind them in VR.
+BARF started in February 2026 as an attempt to build a generative 4D completion system — taking a monocular video reconstruction (which only captures what the camera saw) and filling in the rest of the viewing sphere with AI-generated content for VR exploration.
 
-**BARF** is designed to fill those gaps: generate photorealistic, temporally consistent content for every angle the camera missed, producing a complete 4D scene explorable from any viewpoint in real-time VR.
+While building the system, we ran into two problems: (1) the GPU compute needed to train the generative model at scale, and (2) a more fundamental question — **how would we even know if a completion system had actually worked?**
 
-| | Reconstruction-Only (NeoVerse) | **BARF (Ours)** |
-|---|---|---|
-| Angular coverage | ~45% (front only), measured | Full-sphere completion, by design; end-to-end coverage number pending GPU inference run |
-| Walk behind subject? | Empty | AI-generated, architecture built, not yet executed on GPU |
-| VR-ready? | Not designed for it | Quest 3 export pipeline built; live FPS benchmark pending device test |
-| Temporal consistency? | N/A (no back-view) | 4D scene-conditioned by design; validated so far via synthetic + CPU experiments, not GPU inference |
+That second question became the focus. We discovered that the obvious evaluation metric (angular coverage) is critically broken, and wrote a paper about it:
 
-See [Status](#status--whats-real-vs-pending) below for exactly what has run and what hasn't.
+📄 **[Gaming the Sphere: A Gameability Audit of VR-Completeness Metrics for Generative 4D Scene Completion](paper/barf_paper.pdf)**
 
-## Key Innovation
+## What's In This Repo
 
-Unlike prior work (Vivid4D, See4D) that conditions generative completion on 2D frames, BARF conditions on the 4D scene latent, the full spatiotemporal representation of the scene. The design goal: temporal consistency emerges naturally, since the generated back of a walking person stays consistent across frames because the model sees the full motion dynamics. This conditioning has not yet been run end-to-end on GPU (see Status); the metric and audit work that evaluates it has.
+### Completed and working:
+- **Gameability audit paper** (`paper/barf_paper.pdf`) — adversarial attacks on naive coverage metrics, a robust replacement metric (VRC-R), and a fundamental negative result about reference-free evaluation
+- **VRC-Score / VRC-R metrics** (`src/metrics/`) — formal VR-completeness metrics, 135 passing tests
+- **Adversarial attack suite** (`src/attacks/`) — dust, chaff, flicker chaff, and clone attacks
+- **Gap detection** (`src/gap_detection/`) — angular coverage analysis on real reconstructed scenes
+- **Experiment pipeline** (`scripts/`) — every number and figure in the paper is generated from committed code and data
+- **Web viewer** (`viewer/`) — browser-based point cloud viewer with gap visualization
+- **Feb 2026 sprint archive** (`feb_sprint/`) — early benchmarking of D4RT, NeoVerse, CAP4D, and other methods
 
-## Status: what's real vs. pending
+### Designed but not yet executed (pending GPU access):
+- **Spherical 4D Completion Module** (`src/completion/spherical_completion.py`) — the generative model itself. Architecture is implemented against the Vivid4D backbone but outputs a pass-through placeholder; real inference requires A100/H100-class compute.
+- **VR export pipeline** (`src/vr/export_splat.py`) — Quest-compatible `.splat` exporter. Code is written but untested on actual hardware.
 
-**Built, run, and verified (CPU, deterministic, reproducible):**
-- Gap detection: angular coverage analysis on real reconstructed scenes (`src/gap_detection/`)
-- VRC-Score and VRC-R: a formal VR-completeness metric plus a gameability-audited, robustness-hardened version, with 135 passing tests (`src/metrics/`)
-- Gameability audit: adversarial attacks (dust, chaff, clone) against naive coverage metrics, with a full paper (`paper/barf_paper.pdf`) whose every number is generated from committed result artifacts by `scripts/build_paper.py`, zero hand-typed
-- Quest-compatible `.splat` export pipeline (`src/vr/export_splat.py`)
-- Web viewer for inspecting scenes and coverage gaps (`viewer/`)
+## The Paper
 
-**Designed and implemented, execution pending GPU access:**
-- The Spherical 4D Completion Module itself: the diffusion-based generation step (`src/completion/spherical_completion.py`) is implemented against the Vivid4D backbone but has not yet run a real inference pass, since that requires sustained A100/H100-class GPU time the team didn't have during this phase. It currently outputs a placeholder pass-through so the rest of the pipeline (fusion, export, VR viewing) can be tested end-to-end.
-- The 72 FPS Quest 3 target and ~91% coverage target are design goals derived from the architecture and prior benchmarks, not yet measured on a completed scene.
+**Key findings from "Gaming the Sphere":**
 
-This split is intentional: everything that could be built and proven without a GPU cluster (the metric, the audit, the pipeline plumbing, the export/viewer) is done and tested. The generative completion inference itself is the next phase, gated on GPU time.
-
-## Architecture
-
-```
-Phone Video
-  ↓
-[D4RT] Camera poses + 4D point tracking
-  ↓
-[NeoVerse] 4D Gaussian Splat reconstruction (partial, front-facing only)
-  ↓
-[Gap Detection] Angular coverage analysis → identifies empty viewing angles
-  ↓
-[Spherical 4D Completion Module] ← OUR CONTRIBUTION (pending GPU inference, see Status)
-  • Temporal Feature Extraction: 4D scene latent from NeoVerse output
-  • Spherical Gap Encoder: gap position queries
-  • Completion Diffusion: Vivid4D backbone + scene-conditioned cross-attention
-  • Gaussian Fusion: back-project generated RGBA → new 4D Gaussians
-  ↓
-Complete 4DGS scene covering full (θ, φ, t) viewing sphere
-  ↓
-[VR Export] LOD reduction → Quest-compatible .splat file → 72 FPS on Quest 3
-```
-
-## Novel Contributions
-
-1. **VR-Completeness Problem**: first formal definition: a 4D scene is "VR-complete" if it renders photorealistic, consistent frames from every viewpoint (θ, φ, t). Defined and implemented.
-
-2. **VRC-Score / VRC-R**: first benchmark metric measuring angular coverage, temporal coherence, and perceptual quality simultaneously for VR navigation, plus a gameability-audited robust version (VRC-R) that resists degenerate attacks on naive coverage metrics. Defined, implemented, tested, and stress-tested in a dedicated paper.
-
-3. **4D Scene-Conditioned Completion**: cross-attention conditioning on the full 4D scene latent (not 2D frames), designed to enable temporally coherent generation at all angles. Architecture implemented; GPU inference run pending (see Status).
-
-## Repository Structure
-
-```
-barf-4d-completion/
-├── src/                             # Active codebase
-│   ├── gap_detection/
-│   │   └── detect_gaps.py          # Angular coverage analysis
-│   ├── completion/
-│   │   └── spherical_completion.py # Spherical 4D Completion Module (GPU inference pending)
-│   ├── metrics/
-│   │   ├── vrc_score.py            # VRC-Score metric
-│   │   └── robust_vrc.py           # VRC-R: gameability-audited robust metric
-│   ├── attacks/
-│   │   └── degenerate_completions.py # Adversarial attacks used to stress-test VRC-R
-│   └── vr/
-│       └── export_splat.py         # Quest-compatible .splat exporter
-│
-├── scripts/
-│   ├── run_all_experiments.py      # E0-E3 experiment runner behind the paper's numbers
-│   ├── build_paper.py              # Substitutes every paper number from committed artifacts
-│   ├── make_figures.py             # Generates all paper figures from result artifacts
-│   ├── prepare_data.py             # Converts PLY scenes to npz format
-│   └── reproduce.sh                # End-to-end reproducibility script
-│
-├── tests/                          # 135 tests, all passing
-│
-├── paper/
-│   ├── barf_paper.pdf              # Gaming the Sphere: gameability audit paper
-│   └── REPRODUCIBILITY.md          # Auto-generated number → artifact → command map
-│
-├── viewer/                         # Web-based 3D viewer (PLY loader, gap viz)
-├── data/                           # Test scenes + generated heatmaps
-├── results/session/                # Raw artifacts behind every paper number
-├── BARF_VRC_SCORE.md               # VRC-Score formal mathematical definition
-│
-└── feb_sprint/                     # Archived Feb 2026 sprint (original recon + benchmarking)
-```
+- Inserting just **20 content-free points** can flip a 2.5-million-point scene from 12% to "100% complete" on a naive coverage metric
+- We define a taxonomy of degenerate completions: **dust**, **chaff**, **flicker chaff**, and **clone**
+- We construct **VRC-R**, a robust metric suite that resists all attacks except clone
+- We prove a **fundamental negative result**: reference-free metrics can certify that plausible-looking content exists everywhere, but they can never certify it's correct
 
 ## Quick Start
-
-### Install Dependencies
 
 ```bash
 git clone https://github.com/Saivinay24/barf-4d-completion
 cd barf-4d-completion
 pip install -r requirements.txt
-```
 
-### Run Tests
-
-```bash
+# Run tests
 python3 -m pytest tests/ -q
 # 135 passed
-```
 
-### Run Gap Detection on a PLY File
-
-```bash
-python3 -m src.gap_detection.detect_gaps \
-    --input path/to/scene.ply \
-    --output_json gaps.json \
-    --output_heatmap_dir heatmaps/
-```
-
-### Reproduce All Paper Results
-
-```bash
+# Reproduce all paper results
 bash scripts/reproduce.sh
 ```
 
-### Export to Quest-Compatible .splat
+## Repository Structure
 
-```bash
-python3 -m src.vr.export_splat \
-    --input scene_complete.ply \
-    --output scene.splat \
-    --max_gaussians 500000
+```
+barf-4d-completion/
+├── src/
+│   ├── gap_detection/              # Angular coverage analysis
+│   ├── metrics/                    # VRC-Score and VRC-R
+│   ├── attacks/                    # Adversarial attacks (dust, chaff, clone)
+│   ├── completion/                 # Completion module (placeholder, pending GPU)
+│   └── vr/                         # Quest .splat exporter (untested on hardware)
+│
+├── scripts/                        # Experiment runner, figure generator, reproduce.sh
+├── tests/                          # 135 tests
+├── paper/                          # Paper PDF + reproducibility docs
+├── viewer/                         # Web-based 3D viewer
+├── data/                           # Test scenes (npz)
+├── results/session/                # Raw result artifacts behind every paper number
+├── BARF_VRC_SCORE.md               # VRC-Score formal mathematical definition
+└── feb_sprint/                     # Archived Feb 2026 sprint work
 ```
 
 ## Related Work
 
-BARF sits at the intersection of 4D reconstruction and generative scene completion:
-
-| Method | Monocular | 4D Temporal | Gen. Completion |
-|---|:---:|:---:|:---:|
-| Google D4RT | ✅ | ✅ | ❌ |
-| NeoVerse (CVPR 2026) | ✅ | ✅ | Partial |
-| Vivid4D (ICCV 2025) | ✅ | ✅ | ✅ (recon-focused) |
-| Full-4D (2026) | ✅ | ✅ | ✅ |
-| **BARF (Ours)** | ✅ | ✅ | Evaluation & metrics |
-
-## Tech Stack
-
-| Component | Tool | Role |
-|---|---|---|
-| Camera Poses | [D4RT](https://github.com/google-deepmind/d4rt) | 200+ FPS pose estimation |
-| 4D Reconstruction | [NeoVerse](https://github.com/IamCreateAI/NeoVerse) | Feed-forward 4DGS (CVPR 2026) |
-| Baseline | [Vivid4D](https://arxiv.org/abs/2504.11092) | Prior work comparison (ICCV 2025) |
-| Completion Backbone | Vivid4D UNet + scene cross-attention | Our novel conditioning |
-| VR Runtime | Meta Spatial SDK v0.9.2+ | Quest 3 native splat rendering |
-| Optical Flow | RAFT | Temporal consistency supervision |
-
-## Citation
-
-```bibtex
-@article{bhoomireddy2026gaming,
-  title={Gaming the Sphere: A Gameability Audit of VR-Completeness Metrics for Generative 4D Scene Completion},
-  author={Bhoomireddy, Sai Vinay and Aditya and Srivastava, Aryan and Shrivastava, Shrit and Tanisha and Patnaik, Palak},
-  year={2026}
-}
-```
+| Method | What It Does |
+|---|---|
+| [D4RT](https://github.com/google-deepmind/d4rt) | 4D reconstruction + tracking from monocular video |
+| [NeoVerse](https://github.com/IamCreateAI/NeoVerse) (CVPR 2026) | Feed-forward 4DGS from in-the-wild clips |
+| [Vivid4D](https://arxiv.org/abs/2504.11092) (ICCV 2025) | 4D reconstruction via video inpainting |
+| [Full-4D](https://arxiv.org/abs/2605.25500) (2026) | Full-scope 4D generation from single-view video |
+| **BARF (This repo)** | Evaluation metrics and gameability audit for 4D completion |
 
 ## License
 
